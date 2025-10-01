@@ -5,24 +5,29 @@ echo   KLING VIDEO GENERATOR - SETUP
 echo ========================================
 echo.
 
-REM Check Python installation
+REM Check Python installation (try 'python' first, then 'py')
+set PYTHON_CMD=python
 python --version >nul 2>&1
 if errorlevel 1 (
-    echo [ERROR] Python không được tìm thấy!
-    echo Vui lòng cài đặt Python 3.8+ từ https://www.python.org/downloads/
-    echo Nhớ check "Add Python to PATH" khi cài đặt!
-    pause
-    exit /b 1
+    py --version >nul 2>&1
+    if errorlevel 1 (
+        echo [ERROR] Python không được tìm thấy!
+        echo Vui lòng cài đặt Python 3.8+ từ https://www.python.org/downloads/
+        echo Nhớ check "Add Python to PATH" khi cài đặt!
+        pause
+        exit /b 1
+    )
+    set PYTHON_CMD=py
 )
 
 echo [✓] Python đã được cài đặt
-python --version
+%PYTHON_CMD% --version
 echo.
 
 REM Create virtual environment if not exists
 if not exist "venv" (
     echo [INFO] Đang tạo môi trường ảo Python...
-    python -m venv venv
+    %PYTHON_CMD% -m venv venv
     if errorlevel 1 (
         echo [ERROR] Không thể tạo môi trường ảo!
         pause
